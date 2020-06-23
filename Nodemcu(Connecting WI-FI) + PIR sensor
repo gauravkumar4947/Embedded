@@ -1,0 +1,52 @@
+#include <ESP8266WiFi.h>
+
+const char* ssid="**********"; Your Wifi username
+const char* password = "*********"; //Your wifi password
+
+int ledPin = 13;
+int Sensor = 14;
+int Pirled = 12; 
+
+void setup() {
+  
+  pinMode(ledPin,OUTPUT);
+  pinMode(Pirled,OUTPUT);
+  pinMode(Sensor,INPUT);
+  digitalWrite(ledPin,LOW);
+
+  Serial.begin(115200);
+  Serial.println();
+  Serial.print("Wifi connecting to ");
+  Serial.println( ssid );
+
+  WiFi.begin(ssid,password);
+
+  Serial.println();
+  Serial.print("Connecting");
+
+  while( WiFi.status() != WL_CONNECTED ){
+      delay(500);
+      Serial.print(".");        
+  }
+
+  digitalWrite( ledPin , HIGH);
+  Serial.println();
+
+  Serial.println("Wifi Connected Success!");
+  Serial.print("NodeMCU IP Address : ");
+  Serial.println(WiFi.localIP() );
+
+}
+void loop() {
+  long state= digitalRead(Sensor);
+  if (state == HIGH)
+  { Serial.println("Motion detected");
+    digitalWrite( Pirled , HIGH);
+    delay(500);
+  }
+  else
+   Serial.println("NO motion detected");
+    digitalWrite( Pirled , LOW);
+    
+ }
+
